@@ -22,6 +22,16 @@
   <script>
     Polymer({
       is: 'gobstones-code-runner',
+
+      properties: {
+        initialBoard: Object,
+        code: String,
+        runningSpeed: {
+          type: Number,
+          value: 3 // 1 to 5
+        },
+        targetBoard: String
+      }
     });
   </script>
 
