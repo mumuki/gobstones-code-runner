@@ -1,0 +1,16 @@
+sudo: false
+language: node_js
+node_js:
+- 4.2.4
+script:
+- npm install -g bower && bower install && ./build.sh
+- cd gem && ./bin/setup && bundle exec rake
+deploy:
+  provider: rubygems
+  skip_cleanup: true
+  api_key:
+    secure: TODO
+  gem: gobstones-code-runner
+  on:
+    tags: true
+    repo: gobstones/gobstones-code-runner
