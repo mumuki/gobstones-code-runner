@@ -1,4 +1,6 @@
-<!-- <link rel="import" href="../polymer/polymer.html"> -->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icons/av-icons.html">
+<link rel="import" href="../paper-fab/paper-fab.html">
 
 <!--
 @demo demo/index.html
@@ -10,7 +12,10 @@
     </style>
 
     <div>
-      Hello world!
+      <paper-fab id="gbs-play-button"
+                 icon="av:play-arrow"
+                 on-click="onButtonClick"
+      ></paper-fab>
     </div>
   </template>
 
