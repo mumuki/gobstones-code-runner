@@ -16,7 +16,9 @@
   "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/gobstones/gobstones-code-runner",
   "dependencies": {
+    "gobstones-interpreter": "gobstones/gobstones-interpreter#bower",
     "iron-icons": "^1.2.1",
+    "keymaster": "^1.6.3",
     "paper-fab": "^1.2.2",
     "polymer": "Polymer/polymer#^1.4.0"
   },

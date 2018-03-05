@@ -12,7 +12,7 @@ namespace :wrapper do
     cp_r '../README.md', 'README.md'
 
     #  gobstones-code-runner
-    cp_r '../bower_components/.tmp/gobstones-code-runner.html', 'app/assets/htmls'
+    cp_r '../dist/gobstones-code-runner.html', 'app/assets/htmls'
 
     # polymer
     cp_r '../bower_components/polymer/polymer.html', 'app/assets/htmls/vendor'

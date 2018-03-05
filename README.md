@@ -33,16 +33,7 @@ Y hacer click en el botón de arriba a la derecha "demo"
 $ polymer build
 ```
 
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
-```
+This will create a `dist/gobstones-code-runner.html` file.
 
 ## Running Tests
 
