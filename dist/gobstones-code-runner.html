@@ -4165,6 +4165,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     constructor(parser) {
       this.parser = parser;
       this.handles = [];
+
+      this.__flatten = (arr) => {
+        return arr.reduce((flat, toFlatten) => {
+          return flat.concat(Array.isArray(toFlatten) ? this.__flatten(toFlatten) : toFlatten);
+        }, []);
+      }
     }
 
     run({ ast, request, throttle, callbacks }) {
@@ -4221,9 +4227,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     _getStates(result, teacherAst, lastState = []) {
-      const teacherTools = _(
+      const teacherTools = this.__flatten(Object.values(
         this.parser.getActionsFromAst(teacherAst)
-      ).values().flatten().map(it => it.name).value();
+      )).map(it => it.name);
 
       const snapshots = result.snapshots;
 
@@ -19251,10 +19257,9 @@ function writeJboardToFile(filename, jboard) {
           (!declaration.name.toLowerCase().startsWith("aux") || !omitAux);
 
       const computeDeclarations = (alias) =>
-        _(declarations)
+        declarations
           .filter(withAlias(alias))
-          .map((it) => Object.assign(it, { attributes: ast.getAttributes(it.name) }))
-          .value();
+          .map((it) => Object.assign(it, { attributes: ast.getAttributes(it.name) }));
 
       return {
         procedureDeclarations: computeDeclarations("procedure"),
@@ -19313,7 +19318,7 @@ function writeJboardToFile(filename, jboard) {
        * @event gbs-start
        */
       start: function(request, callbacks, speed) {
-        if (speed === null) speed = 3;
+        if (speed == null) speed = 3;
         if (!request || !request.initialState || !request.code)
           throw new Error("The request must be `{ initialState, code }`");
         if (!callbacks || !callbacks.onResult)
@@ -19374,7 +19379,7 @@ function writeJboardToFile(filename, jboard) {
        * @param {string} reason - The reason
        */
       stop: function(reason) {
-        if (reason === undefined) reason = "cancel";
+        if (reason == null) reason = "cancel";
 
         this.isRunning = false;
         this._clear();

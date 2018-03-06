@@ -1,4 +1,4 @@
-branch=${3:-"dev"} # default to dev when branch isn't specified
+branch=${3:-"master"} # default to master when branch isn't specified
 
 mkdir tempGH
 cd tempGH
