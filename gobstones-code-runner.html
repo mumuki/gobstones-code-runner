@@ -43,7 +43,13 @@
         this.runner = new NormalRunner(this.parser);
       },
 
-      start: function(request, callbacks, speed = 3) {
+      /**
+       * Starts the execution.
+       *
+       * @event gbs-start
+       */
+      start: function(request, callbacks, speed) {
+        if (speed == null) speed = 3;
         if (!request || !request.initialState || !request.code)
           throw new Error("The request must be `{ initialState, code }`");
         if (!callbacks || !callbacks.onResult)
@@ -97,12 +103,28 @@
         }
       },
 
-      stop: function(reason = "cancel") {
+      /**
+       * Stops the execution.
+       *
+       * @event gbs-stop
+       * @param {string} reason - The reason
+       */
+      stop: function(reason) {
+        if (reason == null) reason = "cancel";
+
         this.isRunning = false;
         this._clear();
         this.fire("gbs-stop", reason);
       },
 
+      /**
+       * Fires a `gbs-run-request` event - generally fired when the user wants to run the code (e.g. on button click).
+       * The `event.detail` is a { start, stop } object.
+       *
+       * @event gbs-run-request
+       * @param {function} start - An alias for the element's start(...) method.
+       * @param {function} stop - An alias for the element's stop() method.
+       */
       requestRun: function() {
         this._clear();
         this.fire("gbs-run-request", {

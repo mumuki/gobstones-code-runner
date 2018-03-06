@@ -3784,8 +3784,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     adapt(keyDef) {
       const modifierWithKey = keyDef.substring(2);
 
-      const modifier = _.find(this.modifiers, (it) => {
-        return _.startsWith(modifierWithKey, it);
+      const modifier = this.modifiers.find((it) => {
+        return modifierWithKey.startsWith(it);
       });
 
       const key = modifierWithKey.replace(modifier, '');
@@ -4186,13 +4186,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       if (throttle === 0) {
-        const lastState = _.last(states);
-        _onResult(_.last(states));
+        const lastState = states[states.length - 1];
+        _onResult(lastState);
         return _onEnd();
       }
 
-      const firstState = _.first(states);
-      _onResult(_.first(states));
+      const firstState = states[0];
+      _onResult(firstState);
       if (states.length === 1) return _onEnd();
 
       this.handles = states.slice(1).map((state, i) => {
@@ -4231,17 +4231,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .filter((snapshot, i) => {
           const toName = (it) => it.split("-")[0];
 
-          const prevNames = _.take(snapshot.contextNames, snapshot.contextNames.length - 1);
-          const lastName = _.last(snapshot.contextNames)
+          const prevNames = snapshot.contextNames.slice(0, snapshot.contextNames.length - 1);
+          const lastName = snapshot.contextNames[snapshot.contextNames.length - 1];
 
-          let topIgnoredName = _.find(prevNames, (it) =>
-            _.includes(teacherTools, toName(it))
+          let topIgnoredName = prevNames.find((it) =>
+            teacherTools.includes(toName(it))
           ) || lastName;
 
-          const hasToIgnoreIt = _.includes(teacherTools, toName(topIgnoredName));
+          const hasToIgnoreIt = teacherTools.includes(toName(topIgnoredName));
 
-          const isTheLastOcurrence = _.every(snapshots.slice(i + 1), futureSnapshot =>
-            !_.includes(futureSnapshot.contextNames, topIgnoredName)
+          const isTheLastOcurrence = snapshots.slice(i + 1).every(futureSnapshot =>
+            !futureSnapshot.contextNames.includes(topIgnoredName)
           );
 
           const isShowable = !hasToIgnoreIt || isTheLastOcurrence;
@@ -19202,7 +19202,7 @@ function writeJboardToFile(filename, jboard) {
     }
 
     buildGbb(initialState, size) {
-      const board = this._createBoard(_.assign(initialState, { size }));
+      const board = this._createBoard(Object.assign(initialState, { size }));
       return this.interpreter.gbb.write(board);
     }
 
@@ -19233,7 +19233,7 @@ function writeJboardToFile(filename, jboard) {
       const declarations = this.getActionsFromSource(sourceCode);
 
       const computeDeclarations = (type) =>
-        _.map(declarations[`${type}Declarations`], "name");
+        declarations[`${type}Declarations`].map((it) => it.name);
 
       return {
         procedureNames: computeDeclarations("procedure"),
@@ -19253,7 +19253,7 @@ function writeJboardToFile(filename, jboard) {
       const computeDeclarations = (alias) =>
         _(declarations)
           .filter(withAlias(alias))
-          .map((it) => _.assign(it, { attributes: ast.getAttributes(it.name) }))
+          .map((it) => Object.assign(it, { attributes: ast.getAttributes(it.name) }))
           .value();
 
       return {
@@ -19307,7 +19307,13 @@ function writeJboardToFile(filename, jboard) {
         this.runner = new NormalRunner(this.parser);
       },
 
-      start: function(request, callbacks, speed = 3) {
+      /**
+       * Starts the execution.
+       *
+       * @event gbs-start
+       */
+      start: function(request, callbacks, speed) {
+        if (speed === null) speed = 3;
         if (!request || !request.initialState || !request.code)
           throw new Error("The request must be `{ initialState, code }`");
         if (!callbacks || !callbacks.onResult)
@@ -19361,12 +19367,28 @@ function writeJboardToFile(filename, jboard) {
         }
       },
 
-      stop: function(reason = "cancel") {
+      /**
+       * Stops the execution.
+       *
+       * @event gbs-stop
+       * @param {string} reason - The reason
+       */
+      stop: function(reason) {
+        if (reason === undefined) reason = "cancel";
+
         this.isRunning = false;
         this._clear();
         this.fire("gbs-stop", reason);
       },
 
+      /**
+       * Fires a `gbs-run-request` event - generally fired when the user wants to run the code (e.g. on button click).
+       * The `event.detail` is a { start, stop } object.
+       *
+       * @event gbs-run-request
+       * @param {function} start - An alias for the element's start(...) method.
+       * @param {function} stop - An alias for the element's stop() method.
+       */
       requestRun: function() {
         this._clear();
         this.fire("gbs-run-request", {

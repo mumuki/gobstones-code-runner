@@ -28,8 +28,8 @@
     adapt(keyDef) {
       const modifierWithKey = keyDef.substring(2);
 
-      const modifier = _.find(this.modifiers, (it) => {
-        return _.startsWith(modifierWithKey, it);
+      const modifier = this.modifiers.find((it) => {
+        return modifierWithKey.startsWith(it);
       });
 
       const key = modifierWithKey.replace(modifier, '');

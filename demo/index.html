@@ -13,16 +13,85 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>gobstones-code-runner Demo</title>
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="../gobstones-code-runner.html">
+    <link rel="import" href="../../../bower_components/gs-board/dist/gs-board.html">
   </head>
   <body>
     <style>
+      .boards {
+        display: flex;
+        align-items: center;
+      }
+
+      .boards > div {
+        flex: 1;
+      }
     </style>
 
     <p>An example of <code>&lt;gobstones-code-runner&gt;</code>:</p>
     <p>
-      <gobstones-code-runner></gobstones-code-runner>
+      <dom-module id="runner-demo">
+        <template>
+          <div class="boards">
+            <div class="left">
+              <gs-board
+                id="initialBoard"
+                options='{ "editable": true }'
+                size="{{size}}"
+              ></gs-board>
+            </div>
+            <div class="right">
+              <gs-board id="finalBoard"></gs-board>
+            </div>
+          </div>
+
+          <pre>{{code}}</pre>
+          <gobstones-code-runner></gobstones-code-runner>
+        </template>
+
+        <script>
+          Polymer({
+            is: 'runner-demo',
+            properties: {
+              code: {
+                type: String,
+                value: "program  { repeat(2) { Mover(Norte) } }"
+              },
+              size: {
+                type: Object,
+                value: { x: 2, y: 5 }
+              }
+            },
+            listeners: {
+              "gbs-run-request": "_onRunRequest"
+            },
+
+            _onRunRequest: function(event) {
+              const { detail: controller } = event;
+
+              controller.start({
+                initialState: {
+                  size: this.size,
+                  table: this.$.initialBoard.table,
+                  header: this.$.initialBoard.header
+                },
+                code: {
+                  main: this.code,
+                  library: "",
+                  teacher: ""
+                }
+              }, {
+                onResult: ({ table, head }) => {
+                  this.$.finalBoard.update(table, head);
+                }
+              });
+            }
+          });
+        </script>
+      </dom-module>
+
+      <runner-demo></runner-demo>
     </p>
   </body>
 </html>

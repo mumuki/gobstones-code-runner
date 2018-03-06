@@ -28,7 +28,7 @@
     }
 
     buildGbb(initialState, size) {
-      const board = this._createBoard(_.assign(initialState, { size }));
+      const board = this._createBoard(Object.assign(initialState, { size }));
       return this.interpreter.gbb.write(board);
     }
 
@@ -59,7 +59,7 @@
       const declarations = this.getActionsFromSource(sourceCode);
 
       const computeDeclarations = (type) =>
-        _.map(declarations[`${type}Declarations`], "name");
+        declarations[`${type}Declarations`].map((it) => it.name);
 
       return {
         procedureNames: computeDeclarations("procedure"),
@@ -77,10 +77,9 @@
           (!declaration.name.toLowerCase().startsWith("aux") || !omitAux);
 
       const computeDeclarations = (alias) =>
-        _(declarations)
+        declarations
           .filter(withAlias(alias))
-          .map((it) => _.assign(it, { attributes: ast.getAttributes(it.name) }))
-          .value();
+          .map((it) => Object.assign(it, { attributes: ast.getAttributes(it.name) }));
 
       return {
         procedureDeclarations: computeDeclarations("procedure"),

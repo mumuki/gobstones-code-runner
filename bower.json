@@ -26,7 +26,8 @@
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "gs-board": "gobstones/gs-board#^1.8.13"
   },
   "ignore": [
     "demo",
@@ -34,5 +35,8 @@
     ".git*",
     "gp.sh",
     "deploy-gh-pages.sh"
-  ]
+  ],
+  "resolutions": {
+    "webcomponentsjs": "^0.7.0"
+  }
 }

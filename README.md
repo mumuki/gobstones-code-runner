@@ -19,14 +19,6 @@ Then, run `bower install`
 $ polymer serve
 ```
 
-Despues de correr el comando visitar http://localhost:8080/components/gobstones-code-runner/
-
-![](screenshots/doc.png)
-
-Y hacer click en el botón de arriba a la derecha "demo"
-
-![](screenshots/demo.png)
-
 ## Building Your Application
 
 ```

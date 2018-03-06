@@ -3,6 +3,12 @@
     constructor(parser) {
       this.parser = parser;
       this.handles = [];
+
+      this.__flatten = (arr) => {
+        return arr.reduce((flat, toFlatten) => {
+          return flat.concat(Array.isArray(toFlatten) ? this.__flatten(toFlatten) : toFlatten);
+        }, []);
+      }
     }
 
     run({ ast, request, throttle, callbacks }) {
@@ -24,13 +30,13 @@
       }
 
       if (throttle === 0) {
-        const lastState = _.last(states);
-        _onResult(_.last(states));
+        const lastState = states[states.length - 1];
+        _onResult(lastState);
         return _onEnd();
       }
 
-      const firstState = _.first(states);
-      _onResult(_.first(states));
+      const firstState = states[0];
+      _onResult(firstState);
       if (states.length === 1) return _onEnd();
 
       this.handles = states.slice(1).map((state, i) => {
@@ -59,9 +65,9 @@
     }
 
     _getStates(result, teacherAst, lastState = []) {
-      const teacherTools = _(
+      const teacherTools = this.__flatten(Object.values(
         this.parser.getActionsFromAst(teacherAst)
-      ).values().flatten().map(it => it.name).value();
+      )).map(it => it.name);
 
       const snapshots = result.snapshots;
 
@@ -69,17 +75,17 @@
         .filter((snapshot, i) => {
           const toName = (it) => it.split("-")[0];
 
-          const prevNames = _.take(snapshot.contextNames, snapshot.contextNames.length - 1);
-          const lastName = _.last(snapshot.contextNames)
+          const prevNames = snapshot.contextNames.slice(0, snapshot.contextNames.length - 1);
+          const lastName = snapshot.contextNames[snapshot.contextNames.length - 1];
 
-          let topIgnoredName = _.find(prevNames, (it) =>
-            _.includes(teacherTools, toName(it))
+          let topIgnoredName = prevNames.find((it) =>
+            teacherTools.includes(toName(it))
           ) || lastName;
 
-          const hasToIgnoreIt = _.includes(teacherTools, toName(topIgnoredName));
+          const hasToIgnoreIt = teacherTools.includes(toName(topIgnoredName));
 
-          const isTheLastOcurrence = _.every(snapshots.slice(i + 1), futureSnapshot =>
-            !_.includes(futureSnapshot.contextNames, topIgnoredName)
+          const isTheLastOcurrence = snapshots.slice(i + 1).every(futureSnapshot =>
+            !futureSnapshot.contextNames.includes(topIgnoredName)
           );
 
           const isShowable = !hasToIgnoreIt || isTheLastOcurrence;
