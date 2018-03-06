@@ -9,7 +9,7 @@ deploy:
   provider: rubygems
   skip_cleanup: true
   api_key:
-    secure: TODO
+    secure: CzSyYakrPODnQk3uj+IMVXg2sZEBaN6bhOcAh4G16tKaRtqaogCKwM2j7rqDEcwy0X+1h99clMYDgAZb2U1UO1ZQk5M5x62g6kln+nEAnO/+spTzqnbOHdfm4NNVQWEn+narU+/GVBoEWt80e2yYdyUd9ZLvuElP564i7sjdGSo+ZPJmjiyL7OP75Y9RL3BuX8fWH9Ht1UJFqzazESsE7AWcdKLtVsJURS7wQN3bc0YOVCwXdG+0gnuJsbsL9shPypJUjXPTsdQQPzKfEh1Uv2p9TyoMxJ/T2K+ucFKNag3GU9ZPHCuE1rTYBwIPyAA0BZuuobUNhPI8U2+B5H1Uo6sETn8HNaUAeblqmF7jibMQC9jzBrJijyYfqwjSL8fL4tyPd5MF7K7jnscBg/zk/ni2YIM16g1pGyVsgFbflS75YrRC8nut6qL7lm9GLzO02oRls4OQ6SKc9Zr9A+iDGdhiMrbBgnGMoWT4E1dU/HrrmIKs/YcEf8vB2ev1l1QtZdwLtwOgwJmcbxmJjEzTdiaJbXpGEOAwUj570ggXlND6bsRxTYE0+itwgxCShCm53TZP7l3h1GSrPNx85MsajnstohgASECyu7v/rfnEXgMF7mwtBQR/CsD20rsLdMuWBkrH97bBSPK9usmUv0QrIkP4pB8S2IGOc2JLOLbCctI=
   gem: gobstones-code-runner
   on:
     tags: true
