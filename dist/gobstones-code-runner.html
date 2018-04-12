@@ -19549,6 +19549,12 @@ function writeJboardToFile(filename, jboard) {
           value: false,
           notify: true,
           observer: "_onUpdate"
+        },
+        isDirty: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: "_onUpdate"
         }
       },
 
@@ -19647,11 +19653,27 @@ function writeJboardToFile(filename, jboard) {
         });
       },
 
+      /**
+       * Resets the runner state.
+       * @event gbs-reset-state
+       *
+       */
+      reset: function() {
+        this.isDirty = false;
+        this._clear();
+        this.fire("gbs-reset-state");
+      },
+
       _onButtonClick: function() {
-        if (!this.isRunning) {
-          this.requestRun();
-        } else {
-          this.stop();
+        if(this.isDirty){
+          this.reset();
+        }
+        else{
+          if (!this.isRunning) {
+            this.requestRun();
+          } else {
+            this.stop();
+          }
         }
       },
 
@@ -19710,7 +19732,16 @@ function writeJboardToFile(filename, jboard) {
       },
 
       _onUpdate: function() {
-        this.$.gbsPlayButton.icon = this.isRunning ? "av:stop" : "av:play-arrow";
+        this.$.gbsPlayButton.icon = this._getCurrentButtonIcon();
+      },
+
+      _getCurrentButtonIcon: function () {
+        if(this.isDirty){
+          return "av:replay";
+        }
+        else{
+          return this.isRunning ? "av:stop" : "av:play-arrow"
+        }
       }
     });
   </script>
