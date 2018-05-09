@@ -12,8 +12,8 @@
     }
 
     run({ ast, request, throttle, callbacks }) {
-      const { states, returnValue } = this._interpret(ast, request);
-      this._runWithThrottle(states, returnValue, throttle, callbacks);
+      const { states, returnValue, actualReturnValue } = this._interpret(ast, request);
+      this._runWithThrottle(states, { returnValue, actualReturnValue }, throttle, callbacks);
     }
 
     clear() {
@@ -21,12 +21,12 @@
       this.handles = [];
     }
 
-    _runWithThrottle(states, returnValue, throttle, { onResult, onStop, onReturnValue }) {
+    _runWithThrottle(states, { returnValue, actualReturnValue }, throttle, { onResult, onStop, onReturnValue }) {
       const _onResult = (state) => onResult(state.board || state, state);
 
       const _onEnd = () => {
         onStop("end");
-        onReturnValue(returnValue);
+        onReturnValue(returnValue, actualReturnValue);
       }
 
       if (throttle === 0) {
@@ -54,7 +54,8 @@
         var result = this.parser.interpret(ast.program, initialState);
         return {
           states: this._getStates(result, ast.teacher),
-          returnValue: result.returnValue
+          returnValue: result.returnValue,
+          actualReturnValue: result.actualReturnValue
         };
       } catch (e) {
         e.location = this.parser.getErrorLineAndMode(e, code);
