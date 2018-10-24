@@ -18,9 +18,9 @@
   "dependencies": {
     "gobstones-interpreter": "gobstones/gobstones-interpreter#bower",
     "iron-icons": "^1.2.1",
-    "keymaster": "^1.6.3",
     "paper-fab": "^1.2.2",
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "keymaster": "gobstones/keymaster#^1.6.4"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
