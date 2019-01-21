@@ -9333,7 +9333,7 @@ var LOCALE_ES = exports.LOCALE_ES = {
 
   'PRIM:isEmpty': 'esVacía',
   'PRIM:head': 'primero',
-  'PRIM:tail': 'resto',
+  'PRIM:tail': 'sinElPrimero',
   'PRIM:init': 'comienzo',
   'PRIM:last': 'último',
 
@@ -19957,6 +19957,9 @@ function writeJboardToFile(filename, jboard) {
     constructor() {
       const { GobstonesInterpreterAPI } = window["gobstones-interpreter"];
       this.interpreter = new GobstonesInterpreterAPI();
+
+      if (window.GBS_INFINITE_LOOP_TIMEOUT)
+        this.interpreter.config.setInfiniteLoopTimeout(window.GBS_INFINITE_LOOP_TIMEOUT);
     }
 
     parse(sourceCode, onError = () => {}, onSuccess = (it) => it) {
