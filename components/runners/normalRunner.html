@@ -53,25 +53,34 @@
       try {
         var result = this.parser.interpret(ast.program, initialState);
         return {
-          states: this._getStates(result, ast.teacher),
+          states: this._getStates(result, ast),
           returnValue: result.returnValue,
           actualReturnValue: result.actualReturnValue
         };
       } catch (e) {
         e.location = this.parser.getErrorLineAndMode(e, code);
         return {
-          states: this._getStates(e, ast.teacher, { error: e })
+          states: this._getStates(e, ast, { error: e })
         };
       }
     }
 
-    _getStates(result, teacherAst, lastState = []) {
-      const teacherTools = this.__flatten(Object.values(
-        this.parser.getActionsFromAst(teacherAst)
+    _getActionsOf(ast) {
+      return this.__flatten(Object.values(
+        this.parser.getActionsFromAst(ast)
       )).map(it => it.name);
+    }
+
+    _getStates(result, ast, lastState = []) {
+      const studentAtomic = this._getActionsOf(ast.main).filter((it) =>
+        ast.main.getAttributes(it).atomic != null
+      );
+      const teacherAtomic = this._getActionsOf(ast.teacher).filter((it) =>
+        ast.main.getAttributes(it).nonatomic == null
+      );
+      const atomicActions = studentAtomic.concat(teacherAtomic);
 
       const snapshots = result.snapshots;
-
       return snapshots
         .filter((snapshot, i) => {
           const toName = (it) => it.split("-")[0];
@@ -80,10 +89,10 @@
           const lastName = snapshot.contextNames[snapshot.contextNames.length - 1];
 
           let topIgnoredName = prevNames.find((it) =>
-            teacherTools.includes(toName(it))
+            atomicActions.includes(toName(it))
           ) || lastName;
 
-          const hasToIgnoreIt = teacherTools.includes(toName(topIgnoredName));
+          const hasToIgnoreIt = atomicActions.includes(toName(topIgnoredName));
 
           const isTheLastOcurrence = snapshots.slice(i + 1).every(futureSnapshot =>
             !futureSnapshot.contextNames.includes(topIgnoredName)
