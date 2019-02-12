@@ -13,7 +13,7 @@
 
     run({ ast, request, throttle, callbacks }) {
       const { states, returnValue, actualReturnValue } = this._interpret(ast, request);
-      this._runWithThrottle(states, { returnValue, actualReturnValue }, throttle, callbacks);
+      this._runWithThrottle(states, { returnValue, actualReturnValue }, throttle, request, callbacks);
     }
 
     clear() {
@@ -21,7 +21,7 @@
       this.handles = [];
     }
 
-    _runWithThrottle(states, { returnValue, actualReturnValue }, throttle, { onResult, onStop, onReturnValue }) {
+    _runWithThrottle(states, { returnValue, actualReturnValue }, throttle, request, { onResult, onStop, onReturnValue }) {
       const _onResult = (state) => onResult(state.board || state, state);
 
       const _onEnd = () => {
@@ -29,15 +29,21 @@
         onReturnValue(returnValue, actualReturnValue);
       }
 
-      if (throttle === 0) {
-        const lastState = states[states.length - 1];
-        _onResult(lastState);
-        return _onEnd();
-      }
-
       const firstState = states[0];
       _onResult(firstState);
       if (states.length === 1) return _onEnd();
+
+      if (throttle === 0) {
+        const initialBoardTime = request.initialBoardTime || 0;
+
+        setTimeout(() => {
+          const lastState = states[states.length - 1];
+          _onResult(lastState);
+          _onEnd();
+        }, initialBoardTime);
+
+        return;
+      }
 
       this.handles = states.slice(1).map((state, i) => {
         const ii = i + 1;
