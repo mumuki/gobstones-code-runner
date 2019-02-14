@@ -6936,6 +6936,8 @@ var RuntimePrimitives = exports.RuntimePrimitives = function () {
       return a.tail();
     });
 
+    this._primitiveFunctions[(0, _i18n.i18n)('PRIM:oldTail')] = this._primitiveFunctions[(0, _i18n.i18n)('PRIM:tail')];
+
     this._primitiveFunctions[(0, _i18n.i18n)('PRIM:init')] = new PrimitiveOperation([typeListAny], function (startPos, endPos, globalState, args) {
       var a = args[0];
       if (a.length() === 0) {
@@ -9349,6 +9351,7 @@ var LOCALE_ES = exports.LOCALE_ES = {
   'PRIM:isEmpty': 'esVacía',
   'PRIM:head': 'primero',
   'PRIM:tail': 'sinElPrimero',
+  'PRIM:oldTail': 'resto',
   'PRIM:init': 'comienzo',
   'PRIM:last': 'último',
 
@@ -11584,6 +11587,7 @@ LOCALE_EN['PRIM:maxDir'] = 'maxDir';
 
 LOCALE_EN['PRIM:head'] = 'head';
 LOCALE_EN['PRIM:tail'] = 'tail';
+LOCALE_EN['PRIM:oldTail'] = 'tail';
 LOCALE_EN['PRIM:init'] = 'init';
 LOCALE_EN['PRIM:last'] = 'last';
 
@@ -11994,6 +11998,7 @@ LOCALE_PT['PRIM:maxDir'] = 'maxDir';
 
 LOCALE_PT['PRIM:head'] = 'primeiro';
 LOCALE_PT['PRIM:tail'] = 'resto';
+LOCALE_PT['PRIM:oldTail'] = 'resto';
 LOCALE_PT['PRIM:init'] = 'comeco';
 LOCALE_PT['PRIM:last'] = 'ultimo';
 
