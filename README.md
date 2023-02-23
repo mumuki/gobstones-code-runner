@@ -4,11 +4,13 @@ Element providing code runner interface for Gobstones Web
 
 ## Install Development Environment
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and Bower installed. 
+First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and Bower installed.
 
 ```Bash
 $ npm install -g bower
 $ npm install -g polymer-cli
+$ npm install -g vulcanize
+
 ```
 
 Then, run `bower install`
