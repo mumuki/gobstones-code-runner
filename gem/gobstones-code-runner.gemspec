@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.files         = Dir["lib/**/*"] + Dir["app/**/*"] + ["Rakefile", "README.md"]
   spec.test_files    = `git ls-files -- {test,spec}/*`.split("\n")
 
-  spec.name          = "gobstones-code-runner"
+  spec.name          = "mumuki-gobstones-code-runner"
   spec.require_paths = ["lib"]
   spec.version       = Gobstones::CodeRunner::VERSION
 
