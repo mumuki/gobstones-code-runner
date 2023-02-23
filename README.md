@@ -53,7 +53,7 @@ or simply execute ./deploy-gh-pages.sh
 
 ## Gem wrapper
 
-This module can also be deployed a ruby gem. `gobstones-code-runner` works with Ruby 2.3.1
+This module can also be deployed a ruby gem. `gobstones-code-runner` works with Ruby >= 2.3.1
 
 ```bash
 cd gem
