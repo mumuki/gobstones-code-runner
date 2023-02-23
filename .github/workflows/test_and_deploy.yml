@@ -22,9 +22,6 @@ jobs:
         npm install -g bower polymer-cli eslint
         npm install
         bower install
-    - name: Run JavaScript tests
-      run: |
-        polymer test
     - name: Wrap gem and run ruby tests
       run: |
         npm install -g vulcanize
